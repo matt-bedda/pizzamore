@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { MenuIcon } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="flex flex-col min-h-screen min-w-screen overflow-hidden">
+          <header className="flex w-full flex-row items-center justify-between px-4 py-2 flex-shrink-0">
+            <h1 className="text-2xl font-bold">🍕 Pizzamore</h1>
+            <button className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
+              <MenuIcon className="w-4 h-4" />
+            </button>
+          </header>
+          <main className="flex w-full flex-col flex-grow px-4 py-2">
+            {children}
+          </main>
+          <footer className="flex w-full px-4 py-2 flex-shrink-0 justify-center items-center">
+            <p className="text-sm text-gray-500">
+              Copyright © 2026 Pizzamore. All rights reserved.
+            </p>
+          </footer>
+        </div>
       </body>
     </html>
   );
