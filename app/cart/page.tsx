@@ -69,10 +69,7 @@ export default function CartPage() {
         </Card>
       ) : generatedImage ? (
         <Card>
-          <CardHeader>
-            <CardTitle>Order Confirmed!</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 pt-6">
             <img
               src={generatedImage}
               alt="Your pizza order"
