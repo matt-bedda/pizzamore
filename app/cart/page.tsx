@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import Image from "next/image";
+import { ArrowLeft, Minus, Plus, ShoppingCart, Trash2, Loader2 } from "lucide-react";
 import { useCart } from "@/app/CartContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +12,40 @@ import { Separator } from "@/components/ui/separator";
 export default function CartPage() {
   const { items, total, itemCount, updateQuantity, removeFromCart, clearCart } =
     useCart();
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleCheckout() {
+    setIsGenerating(true);
+    setError(null);
+    setGeneratedImage(null);
+
+    try {
+      const payload = items.map((item) => ({
+        name: item.pizza.name,
+        toppings: item.pizza.toppings,
+        quantity: item.quantity,
+      }));
+
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: payload }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to generate image");
+      }
+
+      const data = await res.json();
+      setGeneratedImage(data.image);
+    } catch {
+      setError("Something went wrong placing your order. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
+  }
 
   return (
     <div className="max-w-2xl mx-auto w-full space-y-4">
@@ -21,7 +57,7 @@ export default function CartPage() {
         </Button>
         <h2 className="text-xl font-bold tracking-tight">Your Cart</h2>
       </div>
-      {items.length === 0 ? (
+      {items.length === 0 && !generatedImage ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12 text-center space-y-3">
             <ShoppingCart className="size-10 text-muted-foreground" />
@@ -30,6 +66,38 @@ export default function CartPage() {
               <Link href="/">Browse the menu</Link>
             </Button>
           </CardContent>
+        </Card>
+      ) : generatedImage ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Order Confirmed!</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="relative w-full aspect-square rounded-lg overflow-hidden">
+              <Image
+                src={generatedImage}
+                alt="Your pizza order"
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+            <p className="text-sm text-muted-foreground text-center">
+              Your order is ready. Buon appetito!
+            </p>
+          </CardContent>
+          <CardFooter>
+            <Button
+              className="w-full cursor-pointer"
+              variant="outline"
+              onClick={() => {
+                setGeneratedImage(null);
+                clearCart();
+              }}
+            >
+              Start New Order
+            </Button>
+          </CardFooter>
         </Card>
       ) : (
         <Card>
@@ -92,16 +160,32 @@ export default function CartPage() {
               </span>
             </div>
             <Separator />
+            {error && (
+              <p className="text-sm text-destructive text-center">{error}</p>
+            )}
             <div className="flex gap-2 w-full">
               <Button
                 variant="destructive"
                 className="cursor-pointer"
                 onClick={clearCart}
+                disabled={isGenerating}
               >
                 Clear Cart
               </Button>
-              <Button className="flex-grow cursor-pointer" size="lg">
-                Checkout
+              <Button
+                className="flex-grow cursor-pointer"
+                size="lg"
+                onClick={handleCheckout}
+                disabled={isGenerating}
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Placing Order...
+                  </>
+                ) : (
+                  "Checkout"
+                )}
               </Button>
             </div>
           </CardFooter>
