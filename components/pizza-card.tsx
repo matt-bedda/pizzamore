@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCart } from "@/app/CartContext";
 import { Pizza } from "@/app/data";
 import { Plus } from "lucide-react";
@@ -24,7 +25,11 @@ export default function PizzaCard({ pizza }: { pizza: Pizza }) {
     >
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
-          <CardTitle className="text-lg">{pizza.name}</CardTitle>
+          <CardTitle className="text-lg">
+            <Link href={`/pizzas/${pizza.id}`} className="hover:underline">
+              {pizza.name}
+            </Link>
+          </CardTitle>
           <Badge variant="secondary" className="text-sm font-semibold shrink-0">
             ${(pizza.price / 100).toFixed(2)}
           </Badge>

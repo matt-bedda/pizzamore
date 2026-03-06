@@ -37,3 +37,13 @@ export async function GET(request: NextRequest) {
     totalPages: Math.ceil(results.length / limit),
   });
 }
+
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+  const newPizza = {
+    id: pizzas.length + 1,
+    ...body,
+  };
+  pizzas.push(newPizza);
+  return NextResponse.json(newPizza, { status: 201 });
+}
