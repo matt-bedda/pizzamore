@@ -15,5 +15,15 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  const sort = searchParams.get("sort") || "name";
+  const order = searchParams.get("order") || "asc";
+  results.sort((a, b) => {
+    const val =
+      sort === "price"
+        ? a.price - b.price
+        : a.name.localeCompare(b.name);
+    return order === "desc" ? -val : val;
+  });
+
   return NextResponse.json(results);
 }
