@@ -1,12 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
-export function AddPizzaForm({ onAdded }: { onAdded?: () => void }) {
+export function AddPizzaDialog({ onAdded }: { onAdded?: () => void }) {
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,17 +37,23 @@ export function AddPizzaForm({ onAdded }: { onAdded?: () => void }) {
     setLoading(false);
 
     if (res.ok) {
-      e.currentTarget.reset();
+      setOpen(false);
       onAdded?.();
     }
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Add a Pizza</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm" className="cursor-pointer">
+          <PlusCircle className="size-4 mr-1" />
+          Add Pizza
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add a Pizza</DialogTitle>
+        </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <Input name="name" placeholder="Pizza name" required />
           <Input
@@ -57,7 +71,7 @@ export function AddPizzaForm({ onAdded }: { onAdded?: () => void }) {
             {loading ? "Adding..." : "Add Pizza"}
           </Button>
         </form>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }
