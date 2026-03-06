@@ -39,6 +39,7 @@ export default function CartPage() {
 
       const data = await res.json();
       setGeneratedImage(data.image);
+      clearCart();
     } catch {
       setError("Something went wrong placing your order. Please try again.");
     } finally {
@@ -85,10 +86,7 @@ export default function CartPage() {
             <Button
               className="w-full cursor-pointer"
               variant="outline"
-              onClick={() => {
-                setGeneratedImage(null);
-                clearCart();
-              }}
+              onClick={() => setGeneratedImage(null)}
             >
               Start New Order
             </Button>
