@@ -155,6 +155,11 @@ export default function CartPage() {
               </span>
             </div>
             <Separator />
+            {isGenerating && (
+              <p className="text-sm text-muted-foreground text-center">
+                Preparing your pizzas, this may take up to 30 seconds...
+              </p>
+            )}
             {error && (
               <p className="text-sm text-destructive text-center">{error}</p>
             )}
@@ -176,7 +181,7 @@ export default function CartPage() {
                 {isGenerating ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    Placing Order...
+                    Preparing your order...
                   </>
                 ) : (
                   "Checkout"
