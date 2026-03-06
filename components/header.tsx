@@ -19,8 +19,8 @@ export default function Header() {
         className="text-2xl font-bold px-2 py-1 cursor-pointer"
       >
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/pizzamore-logo.png" alt="Pizzamore logo" width={28} height={28} />
-          Pizzamore
+          <Image src="/pizzamore-logo.png" alt="PizzAmore logo" width={28} height={28} />
+          PizzAmore
         </Link>
       </Button>
       <Link href="/cart" className="relative inline-flex items-center justify-center p-2 cursor-pointer">

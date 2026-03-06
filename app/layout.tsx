@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pizzamore",
+  title: "PizzAmore",
   description: "Fresh pizza, delivered with love.",
 };
 
@@ -40,7 +40,7 @@ export default function RootLayout({
             </main>
             <footer className="flex w-full px-4 py-2 flex-shrink-0 justify-center items-center border-t border-border">
               <p className="text-sm text-muted-foreground">
-                Copyright © 2026 Pizzamore. All rights reserved.
+                Copyright © 2026 PizzAmore. All rights reserved.
               </p>
             </footer>
           </div>
