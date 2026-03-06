@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Pizza } from "./data";
 import PizzaCard from "@/components/pizza-card";
+import { AddPizzaForm } from "@/components/add-pizza-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -15,7 +16,7 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
+  const fetchPizzas = useCallback(() => {
     const params = new URLSearchParams({
       search,
       sort,
@@ -31,6 +32,10 @@ export default function Home() {
         setTotalPages(data.totalPages);
       });
   }, [search, sort, order, page]);
+
+  useEffect(() => {
+    fetchPizzas();
+  }, [fetchPizzas]);
 
   return (
     <div className="space-y-6">
@@ -66,6 +71,8 @@ export default function Home() {
           Sort by {sort === "name" ? "price" : "name"}
         </Button>
       </div>
+      <Separator />
+      <AddPizzaForm onAdded={fetchPizzas} />
       <Separator />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {pizzas.map((pizza) => (
