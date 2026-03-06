@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowLeft, Minus, Plus, ShoppingCart, Trash2, Loader2 } from "lucide-react";
 import { useCart } from "@/app/CartContext";
 import { Button } from "@/components/ui/button";
@@ -73,15 +72,11 @@ export default function CartPage() {
             <CardTitle>Order Confirmed!</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="relative w-full aspect-square rounded-lg overflow-hidden">
-              <Image
-                src={generatedImage}
-                alt="Your pizza order"
-                fill
-                className="object-cover"
-                unoptimized
-              />
-            </div>
+            <img
+              src={generatedImage}
+              alt="Your pizza order"
+              className="w-full rounded-lg"
+            />
             <p className="text-sm text-muted-foreground text-center">
               Your order is ready. Buon appetito!
             </p>
