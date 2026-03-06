@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/app/CartContext";
@@ -17,7 +18,10 @@ export default function Header() {
         size="lg"
         className="text-2xl font-bold px-2 py-1 cursor-pointer"
       >
-        <Link href="/">🍕 Pizzamore</Link>
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/pizzamore-logo.png" alt="Pizzamore logo" width={28} height={28} />
+          Pizzamore
+        </Link>
       </Button>
       <Link href="/cart" className="relative inline-flex items-center justify-center p-2 cursor-pointer">
         <ShoppingCart className="size-5" />
