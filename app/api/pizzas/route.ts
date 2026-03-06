@@ -25,5 +25,15 @@ export async function GET(request: NextRequest) {
     return order === "desc" ? -val : val;
   });
 
-  return NextResponse.json(results);
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "6");
+  const start = (page - 1) * limit;
+  const paged = results.slice(start, start + limit);
+
+  return NextResponse.json({
+    data: paged,
+    total: results.length,
+    page,
+    totalPages: Math.ceil(results.length / limit),
+  });
 }

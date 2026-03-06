@@ -12,14 +12,25 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("name");
   const [order, setOrder] = useState("asc");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    const params = new URLSearchParams({ search, sort, order });
+    const params = new URLSearchParams({
+      search,
+      sort,
+      order,
+      page: page.toString(),
+      limit: "6",
+    });
 
     fetch(`/api/pizzas?${params}`)
       .then((res) => res.json())
-      .then((data) => setPizzas(data));
-  }, [search, sort, order]);
+      .then((data) => {
+        setPizzas(data.data);
+        setTotalPages(data.totalPages);
+      });
+  }, [search, sort, order, page]);
 
   return (
     <div className="space-y-6">
@@ -34,7 +45,10 @@ export default function Home() {
           type="text"
           placeholder="Search pizzas..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
           className="flex-grow"
         />
         <Button
@@ -57,6 +71,27 @@ export default function Home() {
         {pizzas.map((pizza) => (
           <PizzaCard key={pizza.id} pizza={pizza} />
         ))}
+      </div>
+      <div className="flex items-center justify-center gap-2">
+        <Button
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={page === 1}
+        >
+          Previous
+        </Button>
+        <span className="text-sm text-muted-foreground">
+          Page {page} of {totalPages}
+        </span>
+        <Button
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+          disabled={page === totalPages}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );
