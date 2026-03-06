@@ -3,22 +3,31 @@
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/app/CartContext";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default function Header() {
   const { items } = useCart();
 
   return (
-    <header className="flex w-full flex-row items-center justify-between px-4 py-2 flex-shrink-0">
-      <Link href="/" className="text-2xl font-bold">🍕 Pizzamore</Link>
-      <Link
-        href="/cart"
-        className="relative flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+    <header className="flex w-full items-center justify-between px-3 py-2 flex-shrink-0 border-b border-border">
+      <Button
+        asChild
+        variant="ghost"
+        size="lg"
+        className="text-2xl font-bold px-2 py-1 cursor-pointer"
       >
-        <ShoppingCart size={20} />
+        <Link href="/">🍕 Pizzamore</Link>
+      </Button>
+      <Link href="/cart" className="relative inline-flex items-center justify-center p-2 cursor-pointer">
+        <ShoppingCart className="size-5" />
         {items.length > 0 && (
-          <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          <Badge
+            variant="destructive"
+            className="absolute top-0 right-0 size-4 text-[10px] rounded-full p-0 flex items-center justify-center"
+          >
             {items.length}
-          </span>
+          </Badge>
         )}
       </Link>
     </header>
