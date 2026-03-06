@@ -1,10 +1,22 @@
-import PizzaCard from "@/components/pizza-card";
+"use client";
+
+import { useState, useEffect } from "react";
 import { Pizza } from "./data";
+import PizzaCard from "@/components/pizza-card";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
-export default async function Home() {
-  const response = await fetch("http://localhost:3000/api/pizzas");
-  const pizzas: Pizza[] = await response.json();
+export default function Home() {
+  const [pizzas, setPizzas] = useState<Pizza[]>([]);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams({ search });
+
+    fetch(`/api/pizzas?${params}`)
+      .then((res) => res.json())
+      .then((data) => setPizzas(data));
+  }, [search]);
 
   return (
     <div className="space-y-6">
@@ -14,6 +26,12 @@ export default async function Home() {
           Here you can find all the pizzas we offer.
         </p>
       </div>
+      <Input
+        type="text"
+        placeholder="Search pizzas..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
       <Separator />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {pizzas.map((pizza) => (
